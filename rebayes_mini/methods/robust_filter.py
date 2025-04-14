@@ -377,8 +377,7 @@ class ExtendedKalmanFilterMD(ExtendedKalmanFilter):
         self.threshold = threshold
         self.observation_precision = jnp.linalg.inv(self.observation_covariance)
 
-    def _update(self, bel, y, x):
-        # TODO: Refactor with new API
+    def _update(self, bel, y, x, yhat, Ht, Rt):
         err = y - self.vobs_fn(bel.mean, x)
         mahalanobis_distance = jnp.sqrt(jnp.einsum("j,jk,k->", err, self.observation_precision, err))
         weighting_term = (mahalanobis_distance < self.threshold).astype(float)
