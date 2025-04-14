@@ -555,7 +555,7 @@ class ExtendedKalmanFilterBernoulli(ExtendedKalmanFilter):
         return B
 
     def step(self, bel, y, x, callback_fn):
-        bel_pred = self._predict_step(bel)
+        bel_pred = self._predict(bel)
         bel = bel_pred.replace(pr_inlier=1.0, tau=1.0)
         _inner = partial(self._inner_update, bel_pred=bel_pred, y=y, x=x)
         bel_update = jax.lax.fori_loop(0, self.n_inner, _inner, bel)
